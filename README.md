@@ -10,8 +10,9 @@ Simply wrap `HTMLResponse` around your HTML content and return it from your rout
 import Vapor
 import VaporElementary
 
-let router = Router()
-router.get("index") { _, _ in
+let app = try await Application.make(.detect())
+
+app.get("index") { _ in
     HTMLResponse {
         MyIndexPage()
     }
