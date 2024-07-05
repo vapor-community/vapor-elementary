@@ -11,4 +11,5 @@ jobs:
     uses: vapor/ci/.github/workflows/run-unit-tests.yml@main
     with:
       with_tsan: false
+      with_coverage: false
     secrets: inherit
