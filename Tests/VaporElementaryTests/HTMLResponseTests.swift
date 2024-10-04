@@ -49,6 +49,47 @@ final class HTMLResponseTests: XCTestCase {
         let response = try await app.sendRequest(.GET, "/")
         XCTAssertEqual(String(buffer: response.body), Array(repeating: "<p></p>", count: count).joined())
     }
+
+    func testRespondsWithCustomHeaders() async throws {
+        self.app.get { _ in
+            var response = HTMLResponse(additionalHeaders: ["foo": "bar"]) { EmptyHTML() }
+            response.headers.add(name: "hx-refresh", value: "true")
+            return response
+        }
+
+        let response = try await app.sendRequest(.GET, "/")
+
+        XCTAssertEqual(response.headers["foo"], ["bar"])
+        XCTAssertEqual(response.headers["hx-refresh"], ["true"])
+        XCTAssertEqual(response.headers.contentType?.description, "text/html; charset=utf-8")
+    }
+
+    func testRespondsWithOverwrittenContentType() async throws {
+        self.app.get { _ in
+            HTMLResponse(additionalHeaders: ["Content-Type": "some"]) { EmptyHTML() }
+        }
+
+        let response = try await app.sendRequest(.GET, "/")
+
+        XCTAssertEqual(response.headers["Content-Type"], ["some"])
+    }
+
+    func testRespondsByWritingToStream() async throws {
+        self.app.get { _ in
+            Response(
+                status: .ok,
+                headers: [:],
+                body: .init(asyncStream: { writer in
+                    try await writer.writeHTML(p { "Hello" })
+                    try await writer.write(.end)
+                })
+            )
+        }
+
+        let response = try await app.sendRequest(.GET, "/")
+
+        XCTAssertEqual(String(buffer: response.body), "<p>Hello</p>")
+    }
 }
 
 struct TestPage: HTMLDocument {
