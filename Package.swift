@@ -23,7 +23,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.102.0"),
-        .package(url: "https://github.com/sliemeobn/elementary.git", .upToNextMajor(from: "0.1.2")),
+        .package(url: "https://github.com/sliemeobn/elementary.git", .upToNextMajor(from: "0.3.0")),
     ],
     targets: [
         .target(
