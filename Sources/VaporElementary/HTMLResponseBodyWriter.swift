@@ -1,9 +1,9 @@
 import Elementary
 import Vapor
 
-struct HTMLResponseBodyStreamWriter: HTMLStreamWriter {
+struct HTMLResponseBodyStreamWriter<Writer: AsyncBodyStreamWriter>: HTMLStreamWriter {
     let allocator: ByteBufferAllocator = .init()
-    var writer: any AsyncBodyStreamWriter
+    var writer: Writer
 
     mutating func write(_ bytes: ArraySlice<UInt8>) async throws {
         try await self.writer.writeBuffer(self.allocator.buffer(bytes: bytes))
