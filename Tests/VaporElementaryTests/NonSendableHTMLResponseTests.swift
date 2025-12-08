@@ -1,8 +1,8 @@
 import Elementary
 import Vapor
 import VaporElementary
-import XCTest
 import XCTVapor
+import XCTest
 
 final class NonSendableHTMLResponseTests: XCTestCase {
     var app: Application!
@@ -45,7 +45,7 @@ final class NonSendableHTMLResponseTests: XCTestCase {
 extension NonSendableHTML: Sendable {}
 
 struct NonSendableHTML: HTML {
-    var content: some HTML {
+    var body: some HTML {
         "Hello"
     }
 }
