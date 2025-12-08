@@ -19,11 +19,11 @@ let package = Package(
         .library(
             name: "VaporElementary",
             targets: ["VaporElementary"]
-        ),
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", from: "4.102.0"),
-        .package(url: "https://github.com/sliemeobn/elementary.git", from: "0.4.3"),
+        .package(url: "https://github.com/elementary-swift/elementary.git", from: "0.4.3"),
     ],
     targets: [
         .target(

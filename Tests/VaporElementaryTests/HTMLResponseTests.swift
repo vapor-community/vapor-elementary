@@ -1,8 +1,8 @@
 import Elementary
 import Vapor
 import VaporElementary
-import XCTest
 import XCTVapor
+import XCTest
 
 final class HTMLResponseTests: XCTestCase {
     var app: Application!
@@ -28,7 +28,10 @@ final class HTMLResponseTests: XCTestCase {
         self.app.get { _ in HTMLResponse { TestPage() } }
 
         let response = try await app.sendRequest(.GET, "/")
-        XCTAssertEqual(String(buffer: response.body), #"<!DOCTYPE html><html><head><title>Test Page</title><link rel="stylesheet" href="/styles.css"></head><body><h1 id="foo">bar</h1></body></html>"#)
+        XCTAssertEqual(
+            String(buffer: response.body),
+            #"<!DOCTYPE html><html><head><title>Test Page</title><link rel="stylesheet" href="/styles.css"></head><body><h1 id="foo">bar</h1></body></html>"#
+        )
     }
 
     func testRespondsWithAFragment() async throws {
@@ -40,11 +43,13 @@ final class HTMLResponseTests: XCTestCase {
 
     func testRespondsWithALargeDocument() async throws {
         let count = 1000
-        self.app.get { _ in HTMLResponse {
-            for _ in 0..<count {
-                p {}
+        self.app.get { _ in
+            HTMLResponse {
+                for _ in 0..<count {
+                    p {}
+                }
             }
-        } }
+        }
 
         let response = try await app.sendRequest(.GET, "/")
         XCTAssertEqual(String(buffer: response.body), Array(repeating: "<p></p>", count: count).joined())
